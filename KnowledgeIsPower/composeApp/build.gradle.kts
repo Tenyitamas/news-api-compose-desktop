@@ -8,15 +8,15 @@ plugins {
 
 kotlin {
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             implementation(compose.runtime)
-            implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
+            implementation(compose.foundation)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
@@ -29,13 +29,14 @@ kotlin {
             implementation(libs.retrofit.gson)
             implementation(libs.gson)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.compose.imageloader)
+            implementation(libs.compose.foundation.desktop)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
     }
 }
-
 
 compose.desktop {
     application {

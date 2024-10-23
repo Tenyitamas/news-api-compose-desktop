@@ -8,6 +8,8 @@ koin-version = "1.1.0"
 retrofit = "2.10.0"
 gson = "2.8.8"
 kotlinx = "1.7.3"
+coil = "2.4.0"
+compose-imageloader = "1.7.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -25,7 +27,9 @@ retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx" }
-
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+compose-foundation-desktop = { module = "org.jetbrains.compose.foundation:foundation-desktop", version.ref = "compose-plugin" }
+compose-imageloader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "compose-imageloader" }
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }

@@ -15,7 +15,7 @@ interface NewsApi {
         pageSize: Int = 50,
         @Query("apiKey")
         apiKey: String = API_KEY
-    ) : Response<NewsResponse>
+    ): Response<NewsResponse>
 
     @GET("v2/everything")
     suspend fun searchNews(
@@ -27,7 +27,7 @@ interface NewsApi {
         pageSize: Int = 50,
         @Query("apiKey")
         apiKey: String = API_KEY
-    ) : Response<NewsResponse>
+    ): Response<NewsResponse>
 
     companion object {
         private const val API_KEY = "4e573d79fb1146da980ad910ef278131"

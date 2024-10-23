@@ -1,13 +1,13 @@
 package com.tenyitamas.kip.presentation.news
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.tenyitamas.kip.domain.model.Article
 import com.tenyitamas.kip.domain.repository.NewsRepository
 import com.tenyitamas.kip.domain.repository.Result
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 class NewsScreenModel(
     private val repository: NewsRepository
@@ -18,8 +18,16 @@ class NewsScreenModel(
         data class Success(val articles: List<Article>) : State()
     }
 
-    fun swapState() {
-        screenModelScope.launch {
+    private var job: Job? = null
+
+    init {
+        loadNews()
+    }
+
+    fun loadNews() {
+        job?.cancel()
+
+        job = screenModelScope.launch {
             mutableState.value = State.Loading
             when (val result = repository.getTopNews("us", 1)) {
                 is Result.Error -> mutableState.value = State.Error
@@ -27,5 +35,4 @@ class NewsScreenModel(
             }
         }
     }
-
 }
