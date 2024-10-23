@@ -25,8 +25,8 @@ class NewsScreen: Screen {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            when (state) {
-                NewsScreenModel.State.Init -> Button(
+            when (val currentState = state) {
+                NewsScreenModel.State.Loading -> Button(
                     onClick = {
                         // navigator.push(DetailedScreen(1))
                         screenModel.swapState()
@@ -34,8 +34,10 @@ class NewsScreen: Screen {
                 ) {
                     Text(text = "Go to detailed screen")
                 }
-                else -> {
-                    Text("HELL YEAH")
+
+                NewsScreenModel.State.Error -> Text(text = "Error")
+                is NewsScreenModel.State.Success -> {
+                    Text(text = currentState.author.toString())
                 }
             }
 

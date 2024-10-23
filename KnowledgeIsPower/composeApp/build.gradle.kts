@@ -25,6 +25,10 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
             implementation(libs.koin.compose)
+            implementation(libs.retrofit)
+            implementation(libs.retrofit.gson)
+            implementation(libs.gson)
+            implementation(libs.kotlinx.coroutines.swing)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
