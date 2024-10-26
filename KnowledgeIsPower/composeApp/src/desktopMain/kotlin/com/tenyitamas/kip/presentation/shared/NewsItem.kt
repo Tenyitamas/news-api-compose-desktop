@@ -22,7 +22,8 @@ import com.tenyitamas.kip.domain.model.Article
 fun NewsItem(
     article: Article,
     onArticleClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    additionalContent: @Composable()((ColumnScope) -> Unit)? = null
 ) {
 
     val placeholderPainter = painterResource("drawable/placeholder.png")
@@ -77,5 +78,7 @@ fun NewsItem(
                 color = TextWhite
             )
         }
+        Spacer(modifier = Modifier.height(4.dp))
+        additionalContent?.invoke(this)
     }
 }

@@ -6,7 +6,6 @@ import com.tenyitamas.kip.domain.model.Article
 import com.tenyitamas.kip.domain.repository.NewsRepository
 import com.tenyitamas.kip.domain.repository.Result
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class NewsScreenModel(
@@ -24,12 +23,27 @@ class NewsScreenModel(
         loadNews()
     }
 
-    fun loadNews() {
+    private fun loadNews() {
         job?.cancel()
 
         job = screenModelScope.launch {
             mutableState.value = State.Loading
             when (val result = repository.getTopNews("us", 1)) {
+                is Result.Error -> mutableState.value = State.Error
+                is Result.Success -> mutableState.value = State.Success(result.data ?: emptyList())
+            }
+        }
+    }
+
+    fun search(keyword: String) {
+        if (keyword.isEmpty()) {
+            loadNews()
+            return
+        }
+        job?.cancel()
+        job = screenModelScope.launch {
+            mutableState.value = State.Loading
+            when (val result = repository.searchNews(keyword, 1)) {
                 is Result.Error -> mutableState.value = State.Error
                 is Result.Success -> mutableState.value = State.Success(result.data ?: emptyList())
             }
