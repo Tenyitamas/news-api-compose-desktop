@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,12 +42,22 @@ class NewsScreen : Screen {
                         modifier = Modifier
                             .fillMaxWidth(0.6f)
                             .border(4.dp, Orange, shape = RoundedCornerShape(15.dp))
-                            .align(Alignment.Center)
+                            .align(if (screenModel.shouldShowSaved) Alignment.TopStart else Alignment.TopCenter)
                             .padding(8.dp)
                             .background(DarkGray),
                         hint = "🔍 Search"
                     ) {
                         screenModel.search(it)
+                    }
+
+                    Button(
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        onClick = { screenModel.onSaveToggleClick() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            contentDescription = null
+                        )
                     }
                 }
             }
@@ -67,20 +77,21 @@ class NewsScreen : Screen {
                     }
 
                     is NewsScreenModel.State.Success -> {
-                        Column(
-                            modifier = Modifier.fillMaxSize().align(Alignment.TopCenter),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
+
+                        if (screenModel.shouldShowSaved) {
                             LazyColumn(
-                                modifier = Modifier.fillMaxWidth(0.6f),
+                                modifier = Modifier.fillMaxWidth(0.3f).align(Alignment.TopEnd),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Top,
                                 userScrollEnabled = true
                             ) {
-                                this.items(currentState.articles) {
+                                if (screenModel.savedArticles.isEmpty()) {
+                                    item { Text("No saved articles", color = Orange) }
+                                }
+                                this.items(screenModel.savedArticles) {
                                     NewsItem(
                                         article = it,
-                                        isSaved = screenModel.savedArticles.any { saved -> it.url != null && it.url == saved.url },
+                                        isSaved = true,
                                         onSaveClick = {
                                             screenModel.onSaveClick(it)
                                         },
@@ -90,6 +101,29 @@ class NewsScreen : Screen {
                                         }
                                     )
                                 }
+                            }
+                        }
+
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth(0.6f)
+                                .align(if (screenModel.shouldShowSaved) Alignment.TopStart else Alignment.TopCenter),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Top,
+                            userScrollEnabled = true
+                        ) {
+                            this.items(currentState.articles) {
+                                NewsItem(
+                                    article = it,
+                                    isSaved = screenModel.savedArticles.any { saved -> it.url != null && it.url == saved.url },
+                                    onSaveClick = {
+                                        screenModel.onSaveClick(it)
+                                    },
+                                    onArticleClick = {
+                                        openWebpage(URI.create(it.url ?: "https://en.wikipedia.org/wiki/HTTP_404"))
+                                        // navigator.push(DetailedScreen(it))
+                                    }
+                                )
                             }
                         }
                     }

@@ -23,6 +23,9 @@ class NewsScreenModel(
     var savedArticles by mutableStateOf(emptyList<Article>())
         private set
 
+    var shouldShowSaved by mutableStateOf(false)
+        private set
+
     private var job: Job? = null
 
     init {
@@ -76,4 +79,7 @@ class NewsScreenModel(
         }
     }
 
+    fun onSaveToggleClick() {
+        shouldShowSaved = !shouldShowSaved
+    }
 }
