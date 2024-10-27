@@ -4,6 +4,15 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.sqldelight)
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("com.tenyitamas.kip")
+        }
+    }
 }
 
 kotlin {
@@ -31,6 +40,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.compose.imageloader)
             implementation(libs.compose.foundation.desktop)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
+            implementation(libs.sqldelight.driver.sqlite)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

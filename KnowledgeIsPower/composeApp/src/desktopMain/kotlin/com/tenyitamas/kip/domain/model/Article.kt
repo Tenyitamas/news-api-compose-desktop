@@ -1,6 +1,7 @@
 package com.tenyitamas.kip.domain.model
 
 data class Article(
+    val id: Long = 0,
     val author: String?,
     val content: String?,
     val description: String?,

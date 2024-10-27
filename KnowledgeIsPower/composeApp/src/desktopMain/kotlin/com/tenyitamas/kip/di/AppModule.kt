@@ -1,5 +1,7 @@
 package com.tenyitamas.kip.di
 
+import com.tenyitamas.kip.Database
+import com.tenyitamas.kip.data.local.DatabaseDriverFactory
 import com.tenyitamas.kip.data.remote.NewsApi
 import com.tenyitamas.kip.data.repository.NewsRepositoryImpl
 import com.tenyitamas.kip.domain.repository.NewsRepository
@@ -15,7 +17,9 @@ val appModule = module {
     single { provideConverterFactory() }
     single { provideRetrofit(get(), get()) }
     single { provideService(get()) }
-    factory { provideNewsRepository(get()) }
+    single { DatabaseDriverFactory.createDriver() }
+    single { Database(driver = get()) }
+    single { provideNewsRepository(get(), get()) }
     factory { NewsScreenModel(get()) }
 }
 
@@ -27,10 +31,8 @@ fun provideHttpClient(): OkHttpClient {
         .build()
 }
 
-
 fun provideConverterFactory(): GsonConverterFactory =
     GsonConverterFactory.create()
-
 
 fun provideRetrofit(
     okHttpClient: OkHttpClient,
@@ -44,9 +46,10 @@ fun provideRetrofit(
 }
 
 fun provideNewsRepository(
-    api: NewsApi
+    api: NewsApi,
+    db: Database
 ): NewsRepository {
-    return NewsRepositoryImpl(api)
+    return NewsRepositoryImpl(api, db)
 }
 
 private const val BASE_URL = "https://newsapi.org"

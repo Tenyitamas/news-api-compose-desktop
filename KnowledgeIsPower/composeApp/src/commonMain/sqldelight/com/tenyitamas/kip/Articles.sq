@@ -1,0 +1,56 @@
+CREATE TABLE ArticleEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author TEXT,
+    content TEXT,
+    description TEXT,
+    publishedAt TEXT,
+    source_id TEXT,
+    source_name TEXT,
+    title TEXT,
+    url TEXT,
+    urlToImage TEXT
+);
+
+-- Insert article with all fields
+insertArticle:
+INSERT INTO ArticleEntity (
+    author,
+    content,
+    description,
+    publishedAt,
+    source_id,
+    source_name,
+    title,
+    url,
+    urlToImage
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Get all articles
+getAllArticles:
+SELECT *
+FROM ArticleEntity
+ORDER BY publishedAt DESC;
+
+-- Get article by ID
+getArticleById:
+SELECT *
+FROM ArticleEntity
+WHERE id = ?;
+
+-- Delete article
+deleteArticle:
+DELETE FROM ArticleEntity
+WHERE id = ?;
+
+-- Search articles
+searchArticles:
+SELECT *
+FROM ArticleEntity
+WHERE title LIKE '%' || ? || '%'
+   OR content LIKE '%' || ? || '%'
+   OR description LIKE '%' || ? || '%'
+ORDER BY publishedAt DESC;
+
+-- Clear all articles
+clearAllArticles:
+DELETE FROM ArticleEntity;

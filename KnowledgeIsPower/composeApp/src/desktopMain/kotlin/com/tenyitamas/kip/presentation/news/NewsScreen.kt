@@ -20,7 +20,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.tenyitamas.kip.presentation.detailed.DetailedScreen
 import com.tenyitamas.kip.presentation.news.components.SearchBar
 import com.tenyitamas.kip.presentation.shared.DarkGray
 import com.tenyitamas.kip.presentation.shared.NewsItem
@@ -81,6 +80,10 @@ class NewsScreen : Screen {
                                 this.items(currentState.articles) {
                                     NewsItem(
                                         article = it,
+                                        isSaved = screenModel.savedArticles.any { saved -> it.url != null && it.url == saved.url },
+                                        onSaveClick = {
+                                            screenModel.onSaveClick(it)
+                                        },
                                         onArticleClick = {
                                             openWebpage(URI.create(it.url ?: "https://en.wikipedia.org/wiki/HTTP_404"))
                                             // navigator.push(DetailedScreen(it))
